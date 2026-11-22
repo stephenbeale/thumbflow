@@ -19,7 +19,7 @@ from datetime import datetime
 from fractions import Fraction
 from pathlib import Path
 
-try:  # use the Windows certificate store (AVG's HTTPS scanning breaks Python's bundled certs)
+try:  # use the Windows certificate store (antivirus HTTPS scanning breaks Python's bundled certs)
     import truststore
     truststore.inject_into_ssl()
 except ImportError:
