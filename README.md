@@ -35,8 +35,8 @@ Output per grab: `frame_<frameNo>.png` (original) and `cutout_<frameNo>.png` (tr
 
 Copy `thumbflow.config.example.json` to `thumbflow.config.json` (git-ignored — design links act as keys, so keep them out of the repo) and set `canva_url`.
 
-- **Best: a Template link.** In Canva open your thumbnail design → **Share → More → Template link** → copy. Opening it creates a *fresh copy* every time, so your template stays untouched.
-- An `.../edit` link also works, but opens the original — the script reminds you to do **File → Make a copy** before pasting.
+- **Free Canva:** use your design's `.../edit` link (copy it from the address bar). It opens the original, so the script reminds you to do **File → Make a copy** and paste into the copy, keeping the template untouched.
+- **Canva Pro:** a **Share → More → Template link** opens a fresh copy automatically, so no reminder is shown. (A public view-only link won't work: it can't be edited.)
 
 `--canva-url <url>` overrides the config for one run.
 

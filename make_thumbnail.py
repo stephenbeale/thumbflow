@@ -203,8 +203,8 @@ def main(argv: list[str] | None = None) -> int:
     subprocess.run(["explorer", f"/select,{cutouts[0]}"])  # drag-and-drop fallback
     canva_url = args.canva_url or load_config().get("canva_url") or DEFAULT_CANVA_URL
     if is_edit_link(canva_url):
-        print("Opening your ORIGINAL Canva design - do File > Make a copy before pasting,\n"
-              "or set a Template link in thumbflow.config.json to get a fresh copy automatically.")
+        print("\n>>> Canva is opening your ORIGINAL template.\n"
+              ">>> First: File > Make a copy (the copy opens in a new tab), THEN Ctrl+V there.")
     webbrowser.open(canva_url)
     return 0
 
