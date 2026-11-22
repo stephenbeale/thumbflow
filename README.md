@@ -31,6 +31,15 @@ The first run of `thumb.ps1` creates a `.venv` and installs `requirements.txt` a
 
 Output per grab: `frame_<frameNo>.png` (original) and `cutout_<frameNo>.png` (transparent).
 
+## Your Canva template
+
+Copy `thumbflow.config.example.json` to `thumbflow.config.json` (git-ignored — design links act as keys, so keep them out of the repo) and set `canva_url`.
+
+- **Best: a Template link.** In Canva open your thumbnail design → **Share → More → Template link** → copy. Opening it creates a *fresh copy* every time, so your template stays untouched.
+- An `.../edit` link also works, but opens the original — the script reminds you to do **File → Make a copy** before pasting.
+
+`--canva-url <url>` overrides the config for one run.
+
 ## Exact frames
 
 Every `-t` is resolved to one exact frame (the frame rate is read from the file, so 30 and 29.97 both work):

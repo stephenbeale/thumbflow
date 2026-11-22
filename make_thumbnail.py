@@ -29,6 +29,22 @@ HERE = Path(__file__).resolve().parent
 DEFAULT_OUT = Path.home() / "Pictures" / "Thumbnails"
 DEFAULT_CANVA_URL = "https://www.canva.com/folder/uploads"
 DEFAULT_MODEL = "isnet-general-use"
+# Personal settings (e.g. your Canva template link) live here, outside git.
+CONFIG_FILE = HERE / "thumbflow.config.json"
+
+
+def load_config() -> dict:
+    if not CONFIG_FILE.exists():
+        return {}
+    try:
+        return json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        sys.exit(f"{CONFIG_FILE} is not valid JSON: {e}")
+
+
+def is_edit_link(url: str) -> bool:
+    """A Canva .../edit link opens the original design, not a copy."""
+    return bool(re.search(r"canva\.com/design/[^/]+/[^/]+/edit\b", url))
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -43,8 +59,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                    help="rembg model: isnet-general-use (default), u2net, u2net_human_seg, "
                         "birefnet-portrait (best for people, large download), birefnet-general")
     p.add_argument("--alpha-matting", action="store_true", help="Softer, cleaner edges (slower)")
-    p.add_argument("--canva-url", default=DEFAULT_CANVA_URL,
-                   help="Page to open, e.g. your thumbnail template's edit link")
+    p.add_argument("--canva-url", default=None,
+                   help="Canva page to open. Default: canva_url in thumbflow.config.json, "
+                        "else your Uploads page. A Canva *template link* opens a fresh copy each time.")
     p.add_argument("--no-canva", action="store_true", help="Don't copy to clipboard or open Canva")
     return p.parse_args(argv)
 
@@ -184,7 +201,11 @@ def main(argv: list[str] | None = None) -> int:
     if copy_to_clipboard(cutouts[0]):
         print(f"Copied {cutouts[0].name} to the clipboard - press Ctrl+V in Canva.")
     subprocess.run(["explorer", f"/select,{cutouts[0]}"])  # drag-and-drop fallback
-    webbrowser.open(args.canva_url)
+    canva_url = args.canva_url or load_config().get("canva_url") or DEFAULT_CANVA_URL
+    if is_edit_link(canva_url):
+        print("Opening your ORIGINAL Canva design - do File > Make a copy before pasting,\n"
+              "or set a Template link in thumbflow.config.json to get a fresh copy automatically.")
+    webbrowser.open(canva_url)
     return 0
 
 
